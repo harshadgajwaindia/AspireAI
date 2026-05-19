@@ -1,0 +1,64 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply bg-[#08080a] text-slate-100 font-body antialiased;
+    font-size: 15px;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 45%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5 { @apply font-display tracking-tight text-white; }
+}
+
+@layer components {
+  /* Reusable glass card shell */
+  .card {
+    @apply bg-[#13141c]/90 rounded-2xl border border-white/5 shadow-xl backdrop-blur-md transition-all duration-300;
+  }
+  .card:hover {
+    @apply border-white/10 shadow-glow shadow-brand-600/5;
+  }
+
+  /* Subtle animated gradient used behind session progress */
+  .gradient-pulse {
+    background: linear-gradient(135deg, #7c3aed15, #10b98115, #7c3aed15);
+    background-size: 400% 400%;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Typing cursor blink used in question reveal animation */
+  .cursor-blink::after {
+    content: "|";
+    animation: blink 1s step-end infinite;
+    @apply text-brand-500 ml-0.5;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Score badge colors with soft dark mode fills and glowing borders */
+  .score-excellent { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-glow-emerald; }
+  .score-good      { @apply bg-sky-500/10 text-sky-400 border border-sky-500/20; }
+  .score-needs     { @apply bg-amber-500/10 text-amber-400 border border-amber-500/20; }
+  .score-insuf     { @apply bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-glow-rose; }
+}
+
+/* Scrollbar styling for dark mode */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.01); }
+::-webkit-scrollbar-thumb { @apply bg-slate-800 rounded-full border-2 border-[#08080a]; }
+::-webkit-scrollbar-thumb:hover { @apply bg-slate-700; }

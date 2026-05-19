@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: aspire-ai-backend
+
+  autoconfigure:
+    exclude:
+      # Default PgVector wiring uses the primary DataSource (MySQL). We provide a dedicated Postgres pool in PgVectorStoreConfiguration.
+      - org.springframework.ai.vectorstore.pgvector.autoconfigure.PgVectorStoreAutoConfiguration
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/aspireai_db?createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:spring123}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  ai:
+    google:
+      project-id: ${GOOGLE_GENAI_PROJECT_ID:}
+      location: ${GOOGLE_GENAI_LOCATION:us-central1}
+      api-key: ${GOOGLE_GENAI_API_KEY:}
+      genai:
+        api-key: ${GOOGLE_GENAI_API_KEY:}
+        project-id: ${GOOGLE_GENAI_PROJECT_ID:}
+        location: ${GOOGLE_GENAI_LOCATION:us-central1}
+        chat:
+          options:
+            model: gemini-flash-latest
+        embedding:
+          api-key: ${GOOGLE_GENAI_API_KEY:}
+          project-id: ${GOOGLE_GENAI_PROJECT_ID:}
+          location: ${GOOGLE_GENAI_LOCATION:us-central1}
+          text:
+            options:
+              model: gemini-embedding-2
+              dimensions: 768
+
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        dimensions: 768
+        distance-type: cosine_distance
+        index-type: hnsw
+        jdbc-url: jdbc:postgresql://localhost:5432/aspireai_db
+        username: postgres
+        password: postgres
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  cache:
+    type: redis
+
+    redis:
+      time-to-live: 21600000
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    expiration: 86400000 # 24 hours
+
+server:
+  port: 8080
+
+github:
+  api:
+    base-url: https://api.github.com
+    token: ${GITHUB_TOKEN:}
