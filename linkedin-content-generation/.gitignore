@@ -1,0 +1,6 @@
+.env
+venv/
+chromadb_store/
+__pycache__/
+*.pyc
+uploads/
