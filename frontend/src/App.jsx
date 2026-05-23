@@ -8,7 +8,8 @@ import InterviewResultPage from './pages/InterviewResultPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import SignupPage from './pages/SignupPage.jsx'
-import { useAuthStore } from './store/authStore'
+import { useAuthStore } from './store/authStore';
+import RecommendedJobsPage from './pages/RecommendedJobsPage.jsx';
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/interview" element={<ProtectedRoute><InterviewPage /></ProtectedRoute>} />
         <Route path="/interview/result/:sessionId" element={<ProtectedRoute><InterviewResultPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path="/jobs/recommended" element={<ProtectedRoute><RecommendedJobsPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )

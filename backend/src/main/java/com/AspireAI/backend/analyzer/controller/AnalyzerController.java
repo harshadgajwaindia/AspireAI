@@ -2,6 +2,7 @@ package com.AspireAI.backend.analyzer.controller;
 
 import com.AspireAI.backend.analyzer.dto.SkillGapReportDTO;
 import com.AspireAI.backend.analyzer.service.AnalyzerAgentService;
+import com.AspireAI.backend.analyzer.service.ArbeitnowJobFetcherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class AnalyzerController {
 
     private final AnalyzerAgentService analyzerAgent;
+    private final ArbeitnowJobFetcherService jobFetcherService;
 
     /**
      * Main endpoint — triggers the full analysis pipeline.
@@ -47,15 +49,23 @@ public class AnalyzerController {
     public ResponseEntity<SkillGapReportDTO> analyze(
             @RequestPart("resume") MultipartFile resumeFile,
             @RequestParam("targetCompany") String targetCompany,
-            @RequestParam("userId") UUID userId) {
+            @RequestParam("userId") UUID userId,
+            @RequestParam(value = "preparationType", defaultValue = "COMPANY") String preparationType) {
         
-        System.out.println("ANALYZE REQUEST RECEIVED for userId: " + userId);
+        System.out.println("ANALYZE REQUEST RECEIVED for userId: " + userId + ", type: " + preparationType);
 
-        log.info("Received analyze request for userId={} targetCompany={}",
-                userId, targetCompany);
+        log.info("Received analyze request for userId={} targetCompany={} preparationType={}",
+                userId, targetCompany, preparationType);
 
-        SkillGapReportDTO report = analyzerAgent.analyze(userId, resumeFile, targetCompany);
+        SkillGapReportDTO report = analyzerAgent.analyze(userId, resumeFile, targetCompany, preparationType);
         return ResponseEntity.ok(report);
+    }
+
+    @PostMapping("/jobs/fetch-arbeitnow")
+    public ResponseEntity<String> fetchArbeitnowJobs() {
+        log.info("REST request to fetch and ingest Arbeitnow jobs");
+        int count = jobFetcherService.fetchAndIngestJobs();
+        return ResponseEntity.ok("Successfully fetched and ingested " + count + " technical job postings from Arbeitnow.");
     }
 
     /**

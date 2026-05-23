@@ -11,5 +11,7 @@ public interface CompanySkillRequirementRepository extends JpaRepository<Company
 
     List<CompanySkillRequirement> findByCompanyName(String companyName);
 
+    List<CompanySkillRequirement> findByCompanyNameIgnoreCase(String companyName);
+
     boolean existsByCompanyName(String companyName);
 }

@@ -2,8 +2,14 @@ package com.AspireAI.backend.analyzer.dto;
 
 public record SkillGapDTO(
         String skillName,
-        int studentScore,
+        String category,
         int requiredScore,
+        int studentScore,
         int gapSize,
-        String priority    
-) {}
+        String priority,
+        String reason
+) {
+    public int gapScore() {
+        return gapSize;
+    }
+}

@@ -1,6 +1,7 @@
 package com.AspireAI.backend.analyzer.repoitory;
 
 import com.AspireAI.backend.analyzer.entity.JobPosting;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,11 +13,6 @@ import java.util.List;
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, String> {
 
-    /**
-     * Fetch recent postings for a company — used to seed the RAG context
-     * before gap analysis. We only want recent ones (last 60 days) because
-     * older job posts may reflect outdated skill requirements.
-     */
     @Query("""
         SELECT j FROM JobPosting j
         WHERE LOWER(j.companyName) LIKE LOWER(CONCAT('%', :company, '%'))
@@ -28,10 +24,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, String> 
             @Param("since") LocalDateTime since
     );
 
-    /**
-     * Count how many postings we have for a company.
-     * Used to decide whether to fall back to generic requirements.
-     */
     long countByCompanyNameContainingIgnoreCase(String companyName);
 
+    List<JobPosting> findAllByOrderByScrapedAtDesc(Pageable pageable);
 }

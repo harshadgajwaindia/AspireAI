@@ -1,9 +1,17 @@
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
-// Single axios instance — base URL handled by Vite proxy in dev
+// Determine base URL: use VITE_API_BASE_URL for production, fall back to /api for dev proxy
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  return "/api";
+};
+
+// Single axios instance — base URL handled by environment or Vite proxy in dev
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: getBaseURL(),
   headers: { "Content-Type": "application/json" },
   timeout: 1200000, 
 });
@@ -45,11 +53,12 @@ api.interceptors.response.use(
 
 // ── Analyzer ──────────────────────────────────────────────────────────────────
 export const analyzerApi = {
-  analyze: (file, targetCompany, userId) => {
+  analyze: (file, targetCompany, userId, preparationType) => {
     const form = new FormData();
     form.append("resume", file);
     form.append("targetCompany", targetCompany);
     form.append("userId", userId);
+    form.append("preparationType", preparationType || "COMPANY");
     return api.post("/v1/analyzer/analyze", form, {
       headers: { "Content-Type": "multipart/form-data" },
     }).then((r) => r.data);

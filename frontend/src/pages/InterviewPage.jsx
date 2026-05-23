@@ -50,6 +50,11 @@ export default function InterviewPage() {
         answerTimeSeconds: secs,
       });
       feedbackReceived(feedback);
+      if (!feedback.nextQuestion) {
+        navigate(`/interview/result/${sessionId}`);
+      } else {
+        nextQuestion();
+      }
     } catch (err) {
       toast.error(err.message);
       setEvaluating(false);
@@ -87,8 +92,20 @@ export default function InterviewPage() {
           <div className="space-y-6 animate-fade-in">
             <QuestionCard question={currentQuestion} />
             {isEvaluating ? (
-              <div className="card p-10 flex items-center justify-center">
-                <Loader label="Evaluating your answer…" size="md" />
+              <div className="card p-12 flex flex-col items-center justify-center text-center space-y-4 animate-pulse-slow">
+                <Loader
+                  label={
+                    currentQuestion.questionNumber === currentQuestion.totalQuestions
+                      ? "Grading your placement performance & compiling career report…"
+                      : "Saving answer…"
+                  }
+                  size={currentQuestion.questionNumber === currentQuestion.totalQuestions ? "lg" : "md"}
+                />
+                {currentQuestion.questionNumber === currentQuestion.totalQuestions && (
+                  <p className="text-slate-400 font-body text-xs max-w-md">
+                    Our AI is evaluating all your responses sequentially and generating personalized, recruiter-grade placement guidance. This can take a few seconds.
+                  </p>
+                )}
               </div>
             ) : (
               <AnswerInput

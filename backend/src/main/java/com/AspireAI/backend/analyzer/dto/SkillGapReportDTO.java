@@ -5,6 +5,7 @@ import java.util.List;
 
 public record SkillGapReportDTO(
         String targetCompany,
+        String preparationType,
         int overallReadiness,
         List<SkillGapDTO> topGaps,
         SkillProfileDTO skillProfile,
