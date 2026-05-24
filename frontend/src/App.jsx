@@ -38,8 +38,9 @@ export default function App() {
         <Route path="/roadmap" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
         <Route path="/interview" element={<ProtectedRoute><InterviewPage /></ProtectedRoute>} />
         <Route path="/interview/result/:sessionId" element={<ProtectedRoute><InterviewResultPage /></ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/jobs/recommended" element={<ProtectedRoute><RecommendedJobsPage /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+    
       </Routes>
     </BrowserRouter>
   )

@@ -4,7 +4,7 @@ import { useAuthStore } from "../store/authStore";
 // Determine base URL: use VITE_API_BASE_URL for production, fall back to /api for dev proxy
 const getBaseURL = () => {
   if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+    return `${import.meta.env.VITE_API_BASE_URL}/api`;
   }
   return "/api";
 };

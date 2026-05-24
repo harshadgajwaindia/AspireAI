@@ -4,9 +4,9 @@ import { useAuthStore } from '../store/authStore';
 // Use VITE_API_BASE_URL in production (set in Vercel env vars), fall back to /api (Vite proxy in dev)
 const getBaseURL = () => {
   if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+    return `${import.meta.env.VITE_API_BASE_URL}/api`;
   }
-  return '/api';
+  return "/api";
 };
 
 const axiosInstance = axios.create({
