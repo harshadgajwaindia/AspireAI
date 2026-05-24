@@ -75,7 +75,7 @@ security:
     expiration: 86400000 # 24 hours
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 github:
   api:
