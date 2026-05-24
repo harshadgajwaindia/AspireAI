@@ -4,7 +4,6 @@ spring:
 
   autoconfigure:
     exclude:
-      # Default PgVector wiring uses the primary DataSource (PostgreSQL). We provide a dedicated Postgres pool in PgVectorStoreConfiguration.
       - org.springframework.ai.vectorstore.pgvector.autoconfigure.PgVectorStoreAutoConfiguration
 
   datasource:
@@ -13,15 +12,22 @@ spring:
     password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
 
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+
   jpa:
     hibernate:
       ddl-auto: update
 
-    show-sql: true
+    show-sql: false
 
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
 
   data:
     redis:
@@ -32,17 +38,21 @@ spring:
       project-id: ${GOOGLE_GENAI_PROJECT_ID:}
       location: ${GOOGLE_GENAI_LOCATION:us-central1}
       api-key: ${GOOGLE_GENAI_API_KEY:}
+
       genai:
         api-key: ${GOOGLE_GENAI_API_KEY:}
         project-id: ${GOOGLE_GENAI_PROJECT_ID:}
         location: ${GOOGLE_GENAI_LOCATION:us-central1}
+
         chat:
           options:
             model: gemini-2.5-flash
+
         embedding:
           api-key: ${GOOGLE_GENAI_API_KEY:}
           project-id: ${GOOGLE_GENAI_PROJECT_ID:}
           location: ${GOOGLE_GENAI_LOCATION:us-central1}
+
           text:
             options:
               model: gemini-embedding-2
@@ -50,10 +60,11 @@ spring:
 
     vectorstore:
       pgvector:
-        initialize-schema: true
+        initialize-schema: false
         dimensions: 768
         distance-type: cosine_distance
         index-type: hnsw
+
         jdbc-url: ${SPRING_AI_VECTORSTORE_PGVECTOR_JDBC_URL:jdbc:postgresql://db.omjclmgvdkvbnvijzrwg.supabase.co:5432/postgres}
         username: ${SPRING_AI_VECTORSTORE_PGVECTOR_USERNAME:postgres}
         password: ${SPRING_AI_VECTORSTORE_PGVECTOR_PASSWORD:}
@@ -72,9 +83,10 @@ spring:
 security:
   jwt:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-    expiration: 86400000 # 24 hours
+    expiration: 86400000
 
 server:
+  address: 0.0.0.0
   port: ${PORT:8080}
 
 github:
