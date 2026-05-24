@@ -9,6 +9,11 @@ const NAV = [
   { to: "/interview", label: "Mock Interview" },
   { to: "/dashboard", label: "Dashboard" },
   { to: "/jobs/recommended", label: "Jobs" },
+  {
+    to: "https://linkedin-content-generator-black.vercel.app",
+    label: "LinkedIn",
+    external: true,
+  },
 ];
 
 export function Header() {
@@ -29,8 +34,13 @@ export function Header() {
         <NavLink to="/" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-brand-500/25">
             <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                    stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path
+                d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                stroke="white"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
           <span className="font-display font-bold text-white tracking-tight text-lg">
@@ -40,36 +50,53 @@ export function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
-          {NAV.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-350 font-body
-                 ${isActive
-                   ? "bg-brand-600 text-white shadow-lg shadow-brand-600/10"
-                   : "text-slate-400 hover:text-white hover:bg-white/5"
-                 }`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
+          {NAV.map(({ to, label, external }) =>
+            external ? (
+              <a
+                key={to}
+                href={to}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-350 font-body text-slate-400 hover:text-white hover:bg-white/5"
+              >
+                {label}
+              </a>
+            ) : (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-350 font-body
+                   ${
+                     isActive
+                       ? "bg-brand-600 text-white shadow-lg shadow-brand-600/10"
+                       : "text-slate-400 hover:text-white hover:bg-white/5"
+                   }`
+                }
+              >
+                {label}
+              </NavLink>
+            )
+          )}
         </nav>
 
         {/* User Stats & Logout */}
         <div className="hidden md:flex items-center gap-4">
           <div className="flex items-center gap-3 pr-4 border-r border-white/5">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700
-                       flex items-center justify-center text-white text-sm font-bold font-display uppercase shadow-md">
-              {user?.fullName?.charAt(0) || 'U'}
+            <div
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700
+                       flex items-center justify-center text-white text-sm font-bold font-display uppercase shadow-md"
+            >
+              {user?.fullName?.charAt(0) || "U"}
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-200 truncate max-w-[100px]">{user?.fullName}</p>
+              <p className="text-xs font-semibold text-slate-200 truncate max-w-[100px]">
+                {user?.fullName}
+              </p>
               <p className="text-[10px] text-slate-400">Standard User</p>
             </div>
           </div>
-          
+
           <button
             onClick={handleLogout}
             className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all"
@@ -81,16 +108,23 @@ export function Header() {
 
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700
-                     flex items-center justify-center text-white text-xs font-bold font-display uppercase shadow-md">
-            {user?.fullName?.charAt(0) || 'U'}
+          <div
+            className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700
+                     flex items-center justify-center text-white text-xs font-bold font-display uppercase shadow-md"
+          >
+            {user?.fullName?.charAt(0) || "U"}
           </div>
+
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -99,35 +133,55 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-white/5 bg-[#0a0a0c] px-6 py-4 space-y-4 animate-fade-in">
           <nav className="flex flex-col gap-1.5">
-            {NAV.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `px-4 py-2.5 rounded-xl text-sm font-semibold transition-all font-body block
-                   ${isActive
-                     ? "bg-brand-600 text-white shadow-lg"
-                     : "text-slate-400 hover:text-white hover:bg-white/5"
-                   }`
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
+            {NAV.map(({ to, label, external }) =>
+              external ? (
+                <a
+                  key={to}
+                  href={to}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-4 py-2.5 rounded-xl text-sm font-semibold transition-all font-body block text-slate-400 hover:text-white hover:bg-white/5"
+                >
+                  {label}
+                </a>
+              ) : (
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `px-4 py-2.5 rounded-xl text-sm font-semibold transition-all font-body block
+                     ${
+                       isActive
+                         ? "bg-brand-600 text-white shadow-lg"
+                         : "text-slate-400 hover:text-white hover:bg-white/5"
+                     }`
+                  }
+                >
+                  {label}
+                </NavLink>
+              )
+            )}
           </nav>
-          
+
           <div className="pt-4 border-t border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700
-                         flex items-center justify-center text-white text-xs font-bold font-display uppercase">
-                {user?.fullName?.charAt(0) || 'U'}
+              <div
+                className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700
+                         flex items-center justify-center text-white text-xs font-bold font-display uppercase"
+              >
+                {user?.fullName?.charAt(0) || "U"}
               </div>
+
               <div>
-                <p className="text-xs font-semibold text-slate-200">{user?.fullName}</p>
+                <p className="text-xs font-semibold text-slate-200">
+                  {user?.fullName}
+                </p>
                 <p className="text-[10px] text-slate-400">Standard User</p>
               </div>
             </div>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
