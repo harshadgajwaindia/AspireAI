@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Service that provides job posting recommendations.
- * Currently it returns the most recent postings (optionally limited).
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,12 +19,7 @@ public class JobRecommendationService {
 
     private final JobPostingRepository jobPostingRepository;
 
-    /**
-     * Returns the most recent job postings across all companies.
-     *
-     * @param limit maximum number of postings to return (capped at 50)
-     * @return list of {@link JobPostingDTO}
-     */
+   
     public List<JobPostingDTO> getRecentJobRecommendations(int limit) {
         int capped = Math.min(limit, 50);
         List<JobPosting> postings = jobPostingRepository.findAllByOrderByScrapedAtDesc(PageRequest.of(0, capped));

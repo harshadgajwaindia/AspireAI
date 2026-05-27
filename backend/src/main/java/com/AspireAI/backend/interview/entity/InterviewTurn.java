@@ -6,26 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * A single question-answer-feedback turn within a session.
- *
- * Flow per turn:
- * 1. Mock Interviewer (Gemini) generates a question  → question field
- * 2. Student types/speaks their answer               → studentAnswer
- * 3. Gemini evaluates the answer                     → feedbackJson
- * 4. Score is assigned                               → score (0-10)
- *
- * The feedbackJson contains structured feedback:
- * {
- *   "whatWasGood": "...",
- *   "whatWasMissed": "...",
- *   "idealAnswer": "...",
- *   "followUpHint": "..."
- * }
- *
- * ragSourceIds: which job posting / question bank IDs informed this question.
- * Shown to the student as "This type of question appeared in 3 recent TCS interviews."
- */
+
 @Entity
 @Table(name = "interview_turns", indexes = {
         @Index(name = "idx_session_qnum", columnList = "session_id, question_number")

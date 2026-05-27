@@ -21,34 +21,34 @@ public class LearningResource {
     private Long id;
 
     @Column(nullable = false)
-    private String skillName;           // "DSA-Trees & Graphs"
+    private String skillName;          
 
     @Column(nullable = false)
-    private String category;            // "dsa", "backend"
+    private String category;            
 
     @Column(nullable = false)
-    private String title;               // "Binary Trees Complete Guide"
+    private String title;             
 
     @Column(columnDefinition = "text")
-    private String description;         // What this resource covers
+    private String description;        
 
     @Column(nullable = false)
     private String url;
 
     @Column(nullable = false)
-    private String resourceType;        // "VIDEO", "ARTICLE", "LEETCODE_SET", "MOCK"
+    private String resourceType;        
 
     @Column(nullable = false)
-    private Integer difficultyLevel;    // 1-5
+    private Integer difficultyLevel;    
 
     @Column(nullable = false)
     private Integer estimatedMinutes;
 
     @Column(nullable = false)
-    private Double qualityScore;        // 0.0-1.0, updated based on user ratings
-
+    private Double qualityScore; 
+          
     @Column(name = "vector_store_id")
-    private String vectorStoreId;       // ID in PgVector for semantic retrieval
+    private String vectorStoreId;      
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

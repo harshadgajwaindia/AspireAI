@@ -14,7 +14,7 @@ import java.util.List;
 public interface InterviewQuestionRepository
         extends JpaRepository<InterviewQuestion, Long> {
 
-    // Fallback: get questions by skill area and difficulty when RAG returns empty
+   
     @Query("""
         SELECT q FROM InterviewQuestion q
         WHERE q.skillArea = :skillArea

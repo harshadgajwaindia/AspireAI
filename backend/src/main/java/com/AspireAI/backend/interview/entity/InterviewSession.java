@@ -8,17 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Top-level container for one mock interview session.
- *
- * A session has a type (TECHNICAL or HR), a target company,
- * and a series of turns (questions + answers + feedback).
- *
- * lifecyle:  CREATED → IN_PROGRESS → COMPLETED / ABANDONED
- *
- * The overallFeedbackJson is populated by Gemini at the END of the session
- * after reviewing all QA turns together — holistic, not per-question.
- */
+
 @Entity
 @Table(name = "interview_sessions", indexes = {
         @Index(name = "idx_user_status", columnList = "user_id, status")

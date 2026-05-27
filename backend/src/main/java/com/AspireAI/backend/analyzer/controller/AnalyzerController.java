@@ -12,17 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-/**
- * REST controller for the Analyzer Agent.
- *
- * POST /api/v1/analyzer/analyze
- * - Multipart request: resume file + targetCompany + userId
- * - Returns SkillGapReportDTO as JSON
- *
- * consumes = MULTIPART_FORM_DATA_VALUE because we're receiving a file.
- * In production you'd also have auth middleware that extracts userId
- * from the JWT token instead of receiving it as a parameter.
- */
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/analyzer")
@@ -32,15 +22,7 @@ public class AnalyzerController {
     private final AnalyzerAgentService analyzerAgent;
     private final ArbeitnowJobFetcherService jobFetcherService;
 
-    /**
-     * Main endpoint — triggers the full analysis pipeline.
-     *
-     * Example curl:
-     * curl -X POST http://localhost:8080/api/v1/analyzer/analyze \
-     *   -F "resume=@myresume.pdf" \
-     *   -F "targetCompany=TCS Digital" \
-     *   -F "userId=550e8400-e29b-41d4-a716-446655440000"
-     */
+  
     @PostMapping(
             value = "/analyze",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -68,10 +50,7 @@ public class AnalyzerController {
         return ResponseEntity.ok("Successfully fetched and ingested " + count + " technical job postings from Arbeitnow.");
     }
 
-    /**
-     * Quick health check — useful during development to confirm the
-     * service is up before sending a real resume.
-     */
+   
     @GetMapping("/health")
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Analyzer Agent is running");

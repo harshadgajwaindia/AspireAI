@@ -58,6 +58,7 @@ public class SkillExtractionService {
         }
     }
 
+
     public ExtractedSkillsDTO extractSkills(String resumeText, String targetCompany) {
         return extractSkills(resumeText, targetCompany, List.of());
     }

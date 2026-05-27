@@ -78,7 +78,7 @@ public class ApiKeyRotator {
             return defaultChatClient;
         }
         int nextIndex = index.getAndIncrement() % chatClients.size();
-        if (nextIndex < 0) nextIndex = 0; // handle overflow
+        if (nextIndex < 0) nextIndex = 0;
         log.info("Using rotated ChatClient key index {}", nextIndex);
         return chatClients.get(nextIndex);
     }

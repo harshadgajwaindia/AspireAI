@@ -36,9 +36,7 @@ public class ArbeitnowJobFetcherService {
             List<ArbeitnowJob> data
     ) {}
 
-    /**
-     * Fetches job postings from the Arbeitnow public API, filters them via AI-Gating, and ingests them into PgVector.
-     */
+   
     public int fetchAndIngestJobs() {
         log.info("Starting Arbeitnow job fetching job...");
         String apiUrl = "https://www.arbeitnow.com/api/job-board-api";

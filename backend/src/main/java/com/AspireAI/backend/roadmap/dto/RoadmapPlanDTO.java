@@ -1,7 +1,5 @@
 package com.AspireAI.backend.roadmap.dto;
 
-// ─── RoadmapPlanDTO ───────────────────────────────────────────────────────────
-// Full plan returned to the frontend after generation.
 
 public record RoadmapPlanDTO(
         java.util.UUID planId,

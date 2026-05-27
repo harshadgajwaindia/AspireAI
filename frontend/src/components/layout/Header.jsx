@@ -7,13 +7,13 @@ const NAV = [
   { to: "/", label: "Analyzer" },
   { to: "/roadmap", label: "Roadmap" },
   { to: "/interview", label: "Mock Interview" },
-  { to: "/dashboard", label: "Dashboard" },
   { to: "/jobs/recommended", label: "Jobs" },
   {
     to: "https://linkedin-content-generator-black.vercel.app",
-    label: "LinkedIn",
+    label: "LinkedIn Content Generator",
     external: true,
   },
+  { to: "/dashboard", label: "Dashboard" },
 ];
 
 export function Header() {

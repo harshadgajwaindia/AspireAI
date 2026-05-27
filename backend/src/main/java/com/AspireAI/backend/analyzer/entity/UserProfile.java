@@ -8,15 +8,7 @@ import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * Stores the analyzed profile for a user.
- * skillsJson and gapReportJson are stored as JSON columns in MySQL —
- * this avoids creating 10 normalized tables for data that is naturally
- * document-shaped and read as a whole unit, never queried field-by-field.
- *
- * For a production system you'd normalize more, but for MVP this
- * is dramatically simpler and still fast.
- */
+
 @Entity
 @Table(name = "user_profiles")
 @Getter

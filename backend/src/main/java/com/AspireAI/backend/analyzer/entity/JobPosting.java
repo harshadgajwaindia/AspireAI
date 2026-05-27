@@ -22,34 +22,30 @@ public class JobPosting {
     private String id;
 
     @Column(name = "company_name", nullable = false)
-    private String companyName;          // "TCS", "Infosys"
+    private String companyName;          
 
     @Column(name = "role_title", nullable = false)
-    private String roleTitle;            // "Digital Trainee", "Specialist Programmer"
+    private String roleTitle;          
 
     @Column(nullable = false)
-    private String location;             // "Bhopal", "Bangalore", "Remote"
+    private String location;             
 
     @Column(name = "required_skills", columnDefinition = "text")
-    private String requiredSkills;       // comma-separated skill tags for quick filtering
+    private String requiredSkills;       
 
     @Column(name = "experience_range")
-    private String experienceRange;      // "0-2 years", "Fresher"
+    private String experienceRange;      
 
     @Column(name = "salary_range")
-    private String salaryRange;          // "6-12 LPA"
+    private String salaryRange;          
 
     @Column(name = "source_url")
-    private String sourceUrl;            // original Naukri/LinkedIn URL
+    private String sourceUrl;           
 
     @Column(name = "source_platform")
-    private String sourcePlatform;       // "naukri", "linkedin"
+    private String sourcePlatform;      
 
-    /**
-     * This is the foreign key into PgVector's vector_store table.
-     * Spring AI stores documents with metadata, and we use the job posting id
-     * as the document id in PgVector so we can cross-reference.
-     */
+   
     @Column(name = "vector_store_id")
     private String vectorStoreId;
 

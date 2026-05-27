@@ -20,7 +20,6 @@ public class LearningResourceRagService {
     private final VectorStore vectorStore;
     private final LearningResourceRepository resourceRepo;
 
-    // ── INGESTION ──────────────────────────────────────────────────────────
 
     public void ingestResource(LearningResource resource) {
         String textToEmbed = String.format(
@@ -48,16 +47,7 @@ public class LearningResourceRagService {
         log.debug("Ingested resource: {}", resource.getTitle());
     }
 
-    // ── RETRIEVAL ──────────────────────────────────────────────────────────
-
-    /**
-     * Finds the most relevant learning resource for a specific task.
-     *
-     * @param taskDescription  what the student needs to learn
-     * @param category         filter by category (dsa, backend, etc.)
-     * @param difficulty       1-5 difficulty filter
-     * @return best matching LearningResource, or null if none found
-     */
+   
     public LearningResource findBestResource(String taskDescription,
                                              String category,
                                              int difficulty) {
@@ -74,7 +64,6 @@ public class LearningResourceRagService {
         List<Document> results = vectorStore.similaritySearch(request);
 
         if (results.isEmpty()) {
-            // Retry without difficulty filter (more lenient)
             request = SearchRequest.builder()
                     .query(taskDescription)
                     .topK(1)
@@ -86,18 +75,13 @@ public class LearningResourceRagService {
 
         if (results.isEmpty()) return null;
 
-        // Get the DB record for the top result to include URL and full metadata
         String resourceId = (String) results.get(0).getMetadata().get("resource_id");
         if (resourceId == null) return null;
 
         return resourceRepo.findById(Long.parseLong(resourceId)).orElse(null);
     }
 
-    /**
-     * Retrieves context about available resources for a topic.
-     * Used by the RoadmapGeneratorService to tell Gemini what resources
-     * are available when generating task descriptions.
-     */
+    
     public String getResourceContext(String topic, String category) {
         SearchRequest request = SearchRequest.builder()
                 .query("learning resource for " + topic)

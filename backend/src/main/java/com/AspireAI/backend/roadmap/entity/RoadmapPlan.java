@@ -26,33 +26,26 @@ public class RoadmapPlan {
     private UUID userId;
 
     @Column(nullable = false)
-    private String targetCompany;       // "TCS Digital"
+    private String targetCompany;       
 
     @Column(nullable = false)
-    private Integer totalDays;          // 30, 60, or 90
+    private Integer totalDays;        
 
     @Column(nullable = false)
     private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDate targetDate;       // startDate + totalDays
+    private LocalDate targetDate;       
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PlanStatus status;
 
-    /**
-     * Snapshot of readiness score when this plan was generated.
-     * Used to measure improvement over time.
-     */
+  
     @Column(nullable = false)
     private Integer baselineReadiness;
 
-    /**
-     * One plan has many items (daily tasks).
-     * cascade=ALL means saving/deleting the plan also saves/deletes its items.
-     * orphanRemoval=true means removing an item from the list deletes it from DB.
-     */
+   
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("dayNumber ASC")
@@ -66,8 +59,7 @@ public class RoadmapPlan {
     private LocalDateTime updatedAt;
 
     @Column
-    private String lastUpdatedBy;  // "USER" or "CONTENT_AGENT"
-
+    private String lastUpdatedBy; 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

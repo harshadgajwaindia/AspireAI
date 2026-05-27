@@ -18,7 +18,7 @@ public interface InterviewTurnRepository
 
     List<InterviewTurn> findBySessionIdOrderByQuestionNumberAsc(UUID sessionId);
 
-    // Latest unanswered turn — used to resume interrupted sessions
+   
     @Query("""
         SELECT t FROM InterviewTurn t
         WHERE t.session.id = :sessionId

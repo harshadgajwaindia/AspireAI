@@ -16,18 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Fetches public GitHub data for a username.
- *
- * @Cacheable("github-profiles") stores results in Redis for 6 hours.
- * Why? Because:
- * 1. GitHub rate-limits unauthenticated requests to 60/hour
- * 2. A student's GitHub profile doesn't change while they're uploading
- *    resumes multiple times to test different wordings
- *
- * The cache key is the username. If the result is empty (user not found),
- * we still cache it so we don't hammer GitHub with 404s.
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

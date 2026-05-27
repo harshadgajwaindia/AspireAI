@@ -21,10 +21,7 @@ public class JobRecommendationController {
 
     private final JobRecommendationService recommendationService;
 
-    /**
-     * Returns the most recent job postings.
-     * @param limit max number of postings (default 10, capped at 50)
-     */
+  
     @GetMapping(value = "/recommended", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<JobPostingDTO>> getRecommendedJobs(@RequestParam(value = "limit", defaultValue = "10") int limit) {
         log.info("Fetching {} recommended job postings", limit);

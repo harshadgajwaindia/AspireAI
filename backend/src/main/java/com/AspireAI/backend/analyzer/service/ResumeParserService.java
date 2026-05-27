@@ -9,25 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Pure text extraction — no AI, no business logic.
- * Tika auto-detects whether the file is PDF, DOCX, etc.
- * and extracts plain text from it.
- *
- * We also clean the text here:
- * - Remove "Page 1 of 3" type strings
- * - Collapse 3+ consecutive newlines into 2
- * - Trim leading/trailing whitespace
- *
- * Clean text = better LLM output. Garbage in, garbage out.
- */
+
 @Service
 public class ResumeParserService {
 
     private static final Tika tika = new Tika();
 
-    // 5000 chars is plenty for a 1-2 page resume and avoids
-    // burning unnecessary tokens on blank pages at the end
+    
     private static final int MAX_CHARS = 5000;
 
     private static final List<String> ALLOWED_TYPES = List.of(
@@ -47,7 +35,7 @@ public class ResumeParserService {
                         + "Please upload a text-based PDF, not a scanned image.");
             }
 
-            // Truncate to MAX_CHARS to control token spend
+            
             return cleaned.length() > MAX_CHARS
                     ? cleaned.substring(0, MAX_CHARS)
                     : cleaned;
@@ -65,18 +53,15 @@ public class ResumeParserService {
         if (contentType == null || !ALLOWED_TYPES.contains(contentType)) {
             throw new AnalyzerException("Only PDF and DOCX files are supported.");
         }
-        if (file.getSize() > 5 * 1024 * 1024) { // 5MB
+        if (file.getSize() > 5 * 1024 * 1024) { 
             throw new AnalyzerException("File size must be under 5MB.");
         }
     }
 
     private String cleanText(String raw) {
         return raw
-                // Remove "Page X" patterns
                 .replaceAll("(?i)page\\s+\\d+\\s*(of\\s*\\d+)?", "")
-                // Collapse 3+ consecutive blank lines into 2
                 .replaceAll("(\r?\n){3,}", "\n\n")
-                // Remove non-printable characters except newlines/tabs
                 .replaceAll("[^\\x09\\x0A\\x0D\\x20-\\x7E]", " ")
                 .trim();
     }

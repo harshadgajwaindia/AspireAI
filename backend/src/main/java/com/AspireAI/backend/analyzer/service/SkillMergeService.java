@@ -10,28 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Combines the LLM-extracted skills with GitHub corroboration.
- *
- * The core insight: a resume says "I know Java" but GitHub shows
- * 8 Java repositories. That's evidence. We boost the score accordingly.
- *
- * Conversely, if a student claims "I know AWS" but has zero repos
- * with any cloud config files, the score stays as-is (we don't reduce it,
- * because absence of GitHub evidence isn't proof of absence of skill).
- *
- * Score adjustment table:
- * 0 repos in language    → +0
- * 1-2 repos              → +5
- * 3-5 repos              → +10
- * 6+ repos               → +15
- * Score is always capped at 100.
- */
+
 @Slf4j
 @Service
 public class SkillMergeService {
 
-    // Maps skill names to GitHub language names
+    
     private static final Map<String, String> SKILL_TO_LANGUAGE = Map.ofEntries(
             Map.entry("spring boot", "Java"),
             Map.entry("java", "Java"),
@@ -64,12 +48,12 @@ public class SkillMergeService {
 
     private SkillEntryDTO adjustScore(SkillEntryDTO skill, GitHubProfileDTO github) {
         if (!github.hasData()) {
-            return skill; // no GitHub data — return as-is
+            return skill; 
         }
 
         String githubLang = SKILL_TO_LANGUAGE.get(skill.name().toLowerCase());
         if (githubLang == null) {
-            return skill; // skill doesn't map to a GitHub language
+            return skill; 
         }
 
         int repoCount = github.languageFrequency().getOrDefault(githubLang, 0);
@@ -78,7 +62,7 @@ public class SkillMergeService {
             case 0 -> 0;
             case 1, 2 -> 5;
             case 3, 4, 5 -> 10;
-            default -> 15; // 6+ repos
+            default -> 15;
         };
 
         if (boost > 0) {

@@ -17,7 +17,7 @@ public interface LearningResourceRepository
             Integer difficultyLevel
     );
 
-    // Best resources for a skill, sorted by quality
+  
     @Query("""
         SELECT r FROM LearningResource r
         WHERE r.skillName = :skillName

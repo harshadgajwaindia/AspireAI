@@ -4,9 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Full session result shown on the post-interview report page.
- */
+
 public record SessionResultDTO(
         UUID sessionId,
         String targetCompany,
@@ -17,5 +15,5 @@ public record SessionResultDTO(
         Integer overallScore,
         OverallFeedbackDTO overallFeedback,
         List<TurnSummaryDTO> turnSummaries,
-        List<String> suggestedRoadmapAdjustments    // handed to Roadmap Agent
+        List<String> suggestedRoadmapAdjustments    
 ) {}

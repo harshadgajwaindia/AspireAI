@@ -12,11 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/**
- * PgVector auto-configuration uses the primary {@link javax.sql.DataSource}, which here is MySQL.
- * We keep PostgreSQL only for vectors: a dedicated {@link JdbcTemplate}, not a {@link javax.sql.DataSource} bean,
- * so JPA/Hibernate continues to use {@code spring.datasource}.
- */
+
 @Configuration
 @EnableConfigurationProperties(PgVectorStoreConnectionProperties.class)
 @ConditionalOnProperty(prefix = "spring.ai.vectorstore.pgvector", name = "jdbc-url")

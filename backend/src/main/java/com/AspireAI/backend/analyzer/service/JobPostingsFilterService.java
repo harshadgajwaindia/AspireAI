@@ -17,10 +17,7 @@ public class JobPostingsFilterService {
 
     public record FilterResult(boolean isGenuineTechJob, String reason) {}
 
-    /**
-     * Uses Gemini via a rotated API key to verify if the job posting is a genuine tech/software engineering role.
-     * Rejects generic/spam/non-technical postings.
-     */
+  
     public boolean isGenuineTechJob(String title, String description) {
         log.info("AI-Gating Check for job title: '{}'", title);
 
@@ -59,7 +56,7 @@ public class JobPostingsFilterService {
             }
         } catch (Exception e) {
             log.error("AI-Gating filtering failed, defaulting to accept to avoid blocking ingestion. Error: {}", e.getMessage());
-            return true; // Default fallback to avoid blocking pipeline completely
+            return true; 
         }
 
         return true;
