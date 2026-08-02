@@ -1,68 +1,46 @@
-import os
 import json
-from langchain_chroma import Chroma
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_core.documents import Document
-from dotenv import load_dotenv
+import os
 
-load_dotenv()
+SAMPLE_POSTS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "sample_posts.json")
 
-CHROMA_DB_PATH = "./chromadb_store"
-SAMPLE_POSTS_PATH = "./data/sample_posts.json"
-
-def get_embeddings():
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY missing!")
-    return GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-001",
-        google_api_key=api_key
-    )
+_posts_cache = None
 
 def load_knowledge_base():
-    try:
-        embeddings = get_embeddings()
-        if os.path.exists(CHROMA_DB_PATH):
-            print("ChromaDB already loaded.")
-            return Chroma(
-                persist_directory=CHROMA_DB_PATH,
-                embedding_function=embeddings
-            )
-        print("Loading knowledge base for first time...")
-        with open(SAMPLE_POSTS_PATH, "r", encoding="utf-8") as f:
-            posts = json.load(f)
-        documents = [
-            Document(
-                page_content=post["text"],
-                metadata={"type": post["type"]}
-            )
-            for post in posts
-        ]
-        vectorstore = Chroma.from_documents(
-            documents=documents,
-            embedding=embeddings,
-            persist_directory=CHROMA_DB_PATH
-        )
-        print(f"Loaded {len(documents)} posts into ChromaDB!")
-        return vectorstore
-    except Exception as e:
-        print(f"⚠️ Warning: Could not initialize ChromaDB Knowledge Base: {e}")
-        return None
+    """Loads sample posts into memory once at startup — no external DB, no embedding calls."""
+    global _posts_cache
+    with open(SAMPLE_POSTS_PATH, "r", encoding="utf-8") as f:
+        _posts_cache = json.load(f)
+    print(f"Loaded {len(_posts_cache)} posts into in-memory knowledge base!")
 
-def get_similar_posts(query: str, achievement_type: str, k: int = 2) -> list:
-    try:
-        embeddings = get_embeddings()
-        vectorstore = Chroma(
-            persist_directory=CHROMA_DB_PATH,
-            embedding_function=embeddings
-        )
-        results = vectorstore.similarity_search(
-            query=query,
-            k=k,
-            filter={"type": achievement_type}
-        )
-        return [doc.page_content for doc in results]
-    except Exception as e:
-        # If Gemini Embeddings API is blocked or rate limited, return empty list instead of crashing
-        print(f"⚠️ RAG embedding lookup failed ({type(e).__name__}). Proceeding without database context examples...")
-        return []
+def get_similar_posts(user_instruction: str, k: int = 2) -> list:
+    """
+    Simple in-memory RAG: matches the user's achievement description
+    against known post types using keyword detection, and returns
+    the best-matching example posts as style references.
+    """
+    if _posts_cache is None:
+        load_knowledge_base()
+
+    text_lower = user_instruction.lower()
+
+    keyword_map = {
+        "certificate": ["certificate", "certification", "certified", "course", "program"],
+        "project": ["project", "built", "developed", "leetcode", "dsa", "app", "system"],
+        "event": ["hackathon", "event", "conference", "summit", "attended"],
+        "internship": ["internship", "intern", "offer", "hired"],
+        "learning": ["learned", "learning", "days of", "challenge", "streak"],
+    }
+
+    matched_type = None
+    for post_type, keywords in keyword_map.items():
+        if any(kw in text_lower for kw in keywords):
+            matched_type = post_type
+            break
+
+    if matched_type:
+        matches = [p for p in _posts_cache if p["type"] == matched_type]
+        if matches:
+            return matches[:k]
+
+    # Fallback: no clear match, just return the first k posts as general style reference
+    return _posts_cache[:k]

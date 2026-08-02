@@ -3,6 +3,7 @@ import asyncio
 from dotenv import load_dotenv
 import google.generativeai as genai
 from langchain_groq import ChatGroq
+from services.rag_service import get_similar_posts
 
 load_dotenv()
 
