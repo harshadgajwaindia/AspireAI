@@ -35,7 +35,7 @@ async def generate_linkedin_post(user_instruction: str, extracted_doc_text: str)
 
     try:
         print("🤖 Processing context payload via Gemini Cloud...")
-        model = genai.GenerativeModel("gemini-3-flash-preview")
+        model = genai.GenerativeModel("gemini-3.6-flash")
         loop = asyncio.get_event_loop()
         response = await loop.run_in_executor(None, lambda: model.generate_content(prompt_blueprint))
         if response and response.text:
