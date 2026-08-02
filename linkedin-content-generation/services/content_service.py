@@ -35,14 +35,14 @@ async def generate_linkedin_post(user_instruction: str, extracted_doc_text: str)
 
     try:
         print("🤖 Processing context payload via Gemini Cloud...")
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         loop = asyncio.get_event_loop()
         response = await loop.run_in_executor(None, lambda: model.generate_content(prompt_blueprint))
         if response and response.text:
             print("✅ Post successfully generated via Gemini Cloud!")
             return response.text.strip()
-    except Exception:
-        print("⚠️ Gemini Cloud Exception. Rerouting to Groq Cloud Fallback...")
+    except Exception as gemini_error:
+        print(f"⚠️ Gemini Cloud Exception: {gemini_error}. Rerouting to Groq Cloud Fallback...")
 
     try:
         print("🚀 Initializing flagship fallback: llama-3.3-70b-versatile...")
