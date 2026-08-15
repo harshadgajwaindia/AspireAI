@@ -14,10 +14,18 @@ async def generate_linkedin_post(user_instruction: str, extracted_doc_text: str)
     """
     Generates a high-impact LinkedIn post using a dual-cloud strategy.
     """
+    similar_posts = get_similar_posts(user_instruction, k=2)
+    examples_text = "\n\n---\n\n".join([p["text"] for p in similar_posts]) 
+
     prompt_blueprint = f"""
     You are an expert personal branding executive and content strategist.
     Your mission is to transform raw user achievements into captivating, high-performing LinkedIn posts.
     
+    Here are examples of similar high-engagement posts — match their tone, energy, and structure, but do NOT copy their content:
+    ---
+    {examples_text}
+    ---
+
     Here is the background reference context extracted from the user's uploaded document:
     ---
     {extracted_doc_text}
