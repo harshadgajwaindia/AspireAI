@@ -44,7 +44,7 @@ async def generate_linkedin_post(user_instruction: str, extracted_doc_text: str)
 
     try:
         print("🚀 Processing context payload via Groq Cloud...")
-        primary_model = ChatGroq(model_name="llama-3.3-70b-versatile", groq_api_key=os.getenv("GROQ_API_KEY"), temperature=0.5)
+        primary_model = ChatGroq(model_name="openai/gpt-oss-120b", groq_api_key=os.getenv("GROQ_API_KEY"), temperature=0.5)
         loop = asyncio.get_event_loop()
         response = await loop.run_in_executor(None, lambda: primary_model.invoke(prompt_blueprint))
         if response and response.content:
@@ -82,7 +82,7 @@ Format your response as exactly 3 lines, nothing else:
 3. [idea]"""
 
     try:
-        fallback_model = ChatGroq(model_name="llama-3.3-70b-versatile", groq_api_key=os.getenv("GROQ_API_KEY"), temperature=0.7)
+        fallback_model = ChatGroq(model_name="openai/gpt-oss-120b", groq_api_key=os.getenv("GROQ_API_KEY"), temperature=0.7)
         loop = asyncio.get_event_loop()
         response = await loop.run_in_executor(None, lambda: fallback_model.invoke(suggestion_prompt))
         raw_text = response.content.strip()
